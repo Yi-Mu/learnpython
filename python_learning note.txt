@@ -1,0 +1,34 @@
+1.Installation and instruction
+  1.1 Advanced programming languages usually provide a relatively complete base code library that allows you to call directly.Python provides us with code libraries covering the network,files,GUI,database,text and so on.In addtion to the built-in liarbry,Python also has a large number of third-party libraries;
+  1.2 Installation
+    a.'python-3.5.2-amd64',and remember to check "Add Python 3.5 to PATH",then click 'Install Now' and it's OK;
+	b.After Installation,'Win+R','cmd',enter'python'and '>>>'occurs show that installing successfully;
+	c.Files in Python:end with '.py',which need interpreter to execute;There're many interpreters such as IPython,PyPy,Jython and IronPython, but the most popular is CPython come with installation originally.
+  1.3 Insructions
+    a.'Command line' mode and 'Python interactive' mode: 
+	  'Command line': shows 'C:\>',execute '.py' files(enter'python',and come to the later mode);
+	        #wead:run the whole codes in one time,and less interactive;
+	  'Interactive': shows '>>>',results will be shown immediately whenever you enter the codes;
+	        #weak:can not save,click the codes again whenever you want to run;
+	b.Text editor
+	  advice you to use Notepad++,Word and notebook from windows are forbidden;
+	        #from discussions above,there's a good way: Writing codes in the Notepad++ while open interactive window at the same time,copy part of the codes to command lines for vertification if needed, great idea!
+2.Operation
+  2.1 print and input
+      >>>input()
+      >>>print()
+	  >>>exit()                 #exit from 'Python interactive'mode to 'command line'mode;
+	  >>>print('hello, world')  #'string' must enter with '';
+	  >>>print('The quick brown fox','jumps over','the lazy dog')    #',' denotes 'space' in the results;
+	  >>>print(300)             #no need to enter 'Integer' with ''; 
+	  >>>print('100 + 200 =',100+200)                                #the formal denotes 'string' rather than 'integer';
+	  >>>name=input('Please enter your name: ')                      #'xxx' denotes prompt informatin which is better than not;
+	     print('Hello,',name)
+  2.2 indentation
+      When statement end with ':',the next indentation is regarded as 'code block';
+            #strength:fored to write format codes;You'd better to resist "4 spaces" indentation in Notepad++;	          
+	        #weak:'copy-paste' is not supported,you must check indentation after paste;
+      Sensitive to uppercase letters and lowercase ones,pay attention to it;
+	  Set up 'Tab' equals '4 spaces' in Notepad++ and don't mix them.
+  2.3 Data type and variables
+    a.
