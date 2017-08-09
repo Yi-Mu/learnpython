@@ -89,5 +89,138 @@
 			   >>>'%.2f'%3.1415926                        #'3.14'
 			   >>>'Age:%s;Gender:%s'%(25,True)            #'%s'always in work if you don't know what to use, all chnge to string;
 			   >>>'growth rate: %d %%'%89                 #'growth rate: 89%';
-  2.5 
+  2.5 Another two data types: list and tuple
+    a.list(can change)
+	           >>>classmate=['Michael','Bob','Tracy']     
+			   >>>len(classmate)                          #3
+			   >>>classmate[0]                            #'Michael'
+			   >>>classmate[2]                            #'Tracy'
+			   >>>classmate[-1]                           #'Tracy'
+			   >>>classmate[-3]                           #'Michael'
+			   >>>classmate.append('Adam')                #['Michael','Bob','Tracy','Adam']; an append an element in the end;
+			   >>>classmate.insert(1,'Jack')              #['Michael','Jack','Bob','Tracy','Adam']
+			   >>>classmate.pop(1)                        #['Michael','Bob','Tracy','Adam'];delete the element in '1' position;
+			   >>>classmate.pop()                         #['Michael','Bob','Tracy']; delete the last element;
+			   >>>classmate[1]='Sarah'                    #['Michael','Sarah','Tracy']
+			   >>>L=['Apple',1234,True]                   #different data types in a list;
+			   >>>s=['python','java',['asp','php'],'scheme']        #one list is in another list; s[2][1]='php';
+			   >>>L=[]                                    #empty list, len(L)=0;
+			   >>>['c','b','a'].sort()                    #['a','b','c'];
+	b.tuple(cannot change)                 
+	           >>>classmate=('Michael','Bob','Tracy')     
+			   >>>classmate[0]
+			   >>>classmate[-1]                           #just index, cannot append,insert,pop or assignment;
+			   >>>t=()                                    #empty tuple;
+			   >>>t=(1,)                                  #tuple with only one element; ','is needed; t=(1)=1 otherwise;
+			   >>>t=('a','b',['A','B'])                   
+			      t[2][0]='X'
+				  t[2][1]='Y'
+			   >>>t                                       #('a','b',['X','Y']);tuple cannot change while list can change;
+  2.6 conditional judgement
+	           #if <condition1>:<operation1>; elif<condition2>:<operation2>; else:<peration3>; note that Python use INDENTATION;
+	           #don't forget ':';
+	           >>>if x:
+			          print('True')                       #the condition can be wrote shortening;
+			   >>>birth=int(input());                     #input() return 'str',int()/float() can change it to integer/float;
+  2.7 loop:
+               >>>list(range(10))                         #[0,1,2,3,4,5,6,7,8,9]
+			   >>>sum=0
+			      for x in [1,2,3,4,5,6,7,8,9,10]:
+					sum=sum+x
+				  print(sum)                              #sum from 0 to 10;
+			   >>>sum=0
+			      for x in range(101):
+					sum=sum+x
+				  print(sum)                              #sum from 0 to 100;
+			   >>>sum=0
+			      n=99
+				  while n>0:
+					sum=sum+n
+					n=n-2
+				  print(sum)                              #sum 1,3,5,...,99;
+			   >>>n=1
+			      while n<=100:
+					print(n)
+					n=n+1
+				  print('END')                            #1,2,3,...,100,END;
+			   >>>n=1
+			      while n<=100:
+					if n>10:
+						break                             #'break': end the loop in advance;
+					print(n)
+					n=n+1    
+				  print('END')                            #1,2,3,4,5,6,7,8,9,10,END;
+			   >>>n=0
+			      while n<10:
+					n=n+1
+					if n%2==0:
+						continue                          #'continue': end current loop and continue with next loop;
+					print(n)                              #1,3,5,7,9;
+		       #in general,'break' and 'continue' must cooperate with 'if';
+			   #Don't use 'break' and 'continue' abusely,most loops don't need them or can change to a form without them;
+			   #Sometimes 'dead loops' occurs, and 'Ctrl+C' quit;
+  2.8 Dict and Set
+    a.         >>>a={'Michael':95,'Bob':75,'Tracy':85}    #creat a dictionary;
+			   >>>a['Michael']                            #show the value through the key;
+			   >>>a['Adam']=67                            #add new element;
+			   >>>a['Bob']=98                             #change value of an exist key;
+			   >>>a.get('Thomas',-1)                      #check if "Thomas" in keys, if not,return -1;
+			   >>>a.pop('Bob')                            #delete element;
+			           #there's no order in dictionary; dict use 'space' to swap 'time';
+					   #dict in conditions need to search "quickly",One thing to remember is KEY cannot change;
+					   #That is, 'String' and 'Integer' can be keys while 'List' cannot;
+    b.Set      >>>b=set([1,2,3])                          #creat set; a set of keys like dict except without values;
+	           >>>b=set([1,1,2,2,3])                      #{1,2,3}; keys in set cannot repeat;
+			   >>>b.add(5)                                #{1,2,3,5};
+			   >>>b.remove(3)                             #{1,2,5};
+			   >>>s1=set([1,2,3])
+			      s2=set([2,3,4])
+				  s1&s2                                   #{2,3};
+				  s1|s2                                   #{1,2,3,4};
+			                                              #'string' and 'integer' can be elements while 'list' cannot;
+	c.Does String really cannot change?
+               >>>a='abc'
+			      a.replace('a','A')
+			   'Abc'
+			   >>>a                                       #'abc';
+3.Functions
+  3.1 call on built-in functions
+               #help(abs) check informations and all the built-in functions: https://docs.python.org/3/library/functions.html#abs ;
+			   >>>abs(-20)                                #20;
+			   >>>max(20,34,-5,29308)                     #29308;
+			   >>>int('123')                              #123
+			   >>>int(12.34)                              #12
+			   >>>float('12.34')                          #12.34
+			   >>>str(1.23)                               #'1.23'
+			   >>>str(100)                                #'100'
+			   >>>bool(1)                                 #True
+			   >>>bool('')                                #False
+			   >>>c=abs
+			      c(-2)                                   #2; assign a function with a nickname;
+			   >>>hex(255)                                #'0xff';
+			   #if there're wrongs when calling on the functions, learn to see the English messages;
+  3.2 definition functions
+               >>>def move(x,y,step,angle=0):             #set initial value for parameters;
+					import math                           #import built-in pack if needed;
+					nx=x+step*math.cos(angle)             
+					ny=y-step*math.sin(angle)
+					return nx,ny                          #more values with only one 'return' for codes end after meet first one;
+			   >>>x,y=move(100,100,60,math.pi/6)          #the return values are in a tuple!
+			   >>>def myabs(x):
+					if not isinstance(x,(int,float)):     #You'd better to check the data type first!
+						raise TypeError('bad operand type')
+					if x>=0:
+						return x
+					else:
+						return -x                         #I have to emphasize again that 'Tab','space' can not mixed in Notepad++;
+			   #if the 'xxx.py' with only customize functions, check the directory first and 'from xxx import <func_name>';
+			   >>def nop():
+					pass                                  #nothing to do;
+			   >>>if age>=18:
+					pass                                  #'pass'as placeholder,can add sth later,will be error without it;
+  3.3 parameters of a function
+               >>>  
+			   
+				  
+			   
 	           
