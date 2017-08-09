@@ -31,4 +31,63 @@
       Sensitive to uppercase letters and lowercase ones,pay attention to it;
 	  Set up 'Tab' equals '4 spaces' in Notepad++ and don't mix them.
   2.3 Data type and variables
-    a.
+    a.Integer: >>>100
+	           >>>-8080
+			   >>>0xa5b4c3d2            #Hexadecimal is more convinient in computer sometimes beginnig with '0x';
+			                            #there's no size limitation in integer different from other languages;
+	b.Float:   >>>1.23
+			   >>>1.2e-5
+			   >>>4.52e9                #integer is always accurate,while float is a litter error sometimes;
+			                            #there's no size limitation too,but too large shows 'inf'!
+	c.String:  >>>"I'm OK!"             #I'm OK!
+	           >>>'I\' \"OK\"!'         #I'm "OK"! There're many escaped characters such as '\n','\t','\\';
+			   >>>print(r'\\\t\\')      #\\\t\\, not escaped;
+			   >>>print('''line1
+			   ...line2
+			   ...line3''')             #mulity lines;
+    d.Boolean: >>>True and False        #False
+	           >>>True or False         #True
+			   >>>not True              #False
+			   >>>3>5                   #False
+			   >>>not 3>5               #True
+    e."Nnoe":  a special value, not equals to 0;
+	                                    #many other data types such as list,dictionary,customize et al,in the following;
+	f.Variables:
+	           dynamic language which means a variable can be assigned many times,even with different data type.
+	g.Constants:
+	           in general,we use names all with uppercase letters to denote constant,like: 
+			   >>>PI=3.14159265359;
+    f.Addtions about division:
+	           >>>10/3                  #3.333333333333335
+	           >>>9/3                   #3.0
+			   >>>10//3                 #3
+			   >>>10%3                  #1
+  2.4 String and coding
+    a.ASCII:   #One bytes; contains 127 characters(Enlish letters,numbers and some symbols);
+	  Unicode: #Two bytes in general; support all the languages in the world of course Chinese;
+	  UTF-8:   #Changed length bypes(considering RAM), and in fact it contains ASCII; 
+	           #In mordern computer society, Unicode used in RAM while UTF-8 used in transporting;
+			   #and they are transformed into the other when saving or transporting;
+	b.Python with Unicode(that is, support many languages)
+	           >>>print('包含中文的str')
+			   >>>ord('A')              #get the integer representations of the character 'A' in Unicode;
+			   >>>ord('中')
+			   >>>chr(66)               #get the character representations of the integer '66' in Unicode;
+			   >>>chr(25991)
+    c.Encode() and Decode()
+	           >>>'ABC'.encode('ascii')  #'str' in RAM with Unicode(like 'ABC'), 'bytes' in transporting with UTF-8(like b'ABC');
+			   >>>'中文'.encode('utf-8') #str '中文' transform into bypes in UTF-8;
+			   >>>b'ABC'.decode('ascii') #bypes 'ABC' transform into str in ASCII;
+			   >>>b'\xe4\xb8\xad\xe6\x96\x87'.decode('utf-8')
+	d.length   >>>len('ABC')             #how many characters dose string'ABC' contain;
+	           >>>len('中文')
+    f.Most important(ensure there're no messy codes in Chinese)!!!
+	           #Persist transform between str adn bypes with UTF-8,that is: When writing Notepad++;
+			   #the first line is "#-*- coding: utf-8 -*-" and ensure "Encode in UTF-8 without BOM" in Notepad++;
+	g.Format:  >>>'Hi, %s, you have $%d'%('Bob',100000)   #'%d'(integer),'%f'(float),'%s'(string),'%x'(for hexadecimal);
+	           >>>'%3d-----%05d'%(8,8)                    #'  8-----00008';
+			   >>>'%.2f'%3.1415926                        #'3.14'
+			   >>>'Age:%s;Gender:%s'%(25,True)            #'%s'always in work if you don't know what to use, all chnge to string;
+			   >>>'growth rate: %d %%'%89                 #'growth rate: 89%';
+  2.5 
+	           
