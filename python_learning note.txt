@@ -1,3 +1,5 @@
+#-*-  coding:utf-8  -*-
+
 1.Installation and instruction
   1.1 Advanced programming languages usually provide a relatively complete base code library that allows you to call directly.Python provides us with code libraries covering the network,files,GUI,database,text and so on.In addtion to the built-in liarbry,Python also has a large number of third-party libraries;
   1.2 Installation
@@ -219,8 +221,76 @@
 			   >>>if age>=18:
 					pass                                  #'pass'as placeholder,can add sth later,will be error without it;
   3.3 parameters of a function
-               >>>  
-			   
-				  
+    a.位置参数
+	           >>>def power(x,n):
+					s=1
+					while n>0:
+						n=n-1
+						s=s*x
+					return s
+			   >>>power(5,3)
+	b.默认参数
+	           >>>def enroll(name,gender,age=6,city='Beijing'):
+					print('name:',name)
+					print('gender:',gender)
+					print('age:',age)
+					print('city:',city)
+			   >>>enroll('Sarah','female',city='Tianjin') #位置参数在前，默认参数在后;
+			                                              #默认参数必须指向不变对象；
+    c.可变参数
+	           >>>def calc(*numbers):
+					sum=0
+					for n in numbers:
+						sum=sum+n*n
+					return sum
+			   >>>calc(1,3,4,5,6)                         #接收任意个参数，内部接收的是一个tuple;
+			   >>>n=(1,3,4,6,7,7,3,4,5,6,2,3)     
+			      calc(*n)                                #把list或tuple作为可变参量输进去，常见且相当有用;
+	d.命名关键字参数
+	           >>>def person(name,age,*,city,job):
+					print(name,age,city,job)
+			   >>>person('Jack',34,city='Beijing',job='Engineer')   #'*'后的是命名关键字参数,必须传入参数名，这和前的位置参数不同;
+	e.关键字参数
+	           >>>def person(name,age,**kw):
+					print(name,age,kw)
+			   >>>person('Bob',45,city='Beijing,job='Engineer')     #关键字参数，可以传入任意个数;
+			   >>>e={'city':'Beijing','job':'Scientist'}
+			      person('Jack',56,**e)                             #相当有用的写法;
+    f.summarize and application                            #参数组合的顺序必须是：位置，默认，可变，命名关键字，关键字参数;
+	           >>>def f1(a,b,c=0,*args,**kw):
+					print(a,b,c,args,kw)
+			   >>>def f2(a,b,c=0,*,d,**kw):
+					print(a,b,c,d,kw)
+			   >>>f2(1,2,d=99,ext=98)
+			   >>>f1(3,4,'a','b',r=4,t=9)
+			   >>>args1=(1,2,3,4,5,6,7)
+			      kw1={'x':3,'y':3'}
+				  f1(*args1,**kw1)                         #args1这个tuple的长度可以任意，因为*args就接收tuple;
+			   >>>args2=(2,3,4)
+			      kw2={'x':3,'d':6}
+				  f2(*args2,**kw2)                         #args2长度只能是3，因为其后的命名关键字参数必须写关键字,即d=xxx,且kw必须包含'd':xxx;
+			   ###对于任意函数，都可以通过类似'func(*args,**kw)的方式调用，无论其参数怎样定义；
+			   ###*args是可变参数，接收tuple；**kw是关键字参数，接收dict；*args和**kw是默认的习惯写法；
+			   >>>def hello(greeting,*args):
+					if len(args)==0:
+						print('%s!'%greeting)
+					else:
+						print('%s, %s!'%(greeting,', '.join(args)))
+			   >>>def score(**kw):
+					print('   Name Score')
+					print('-------------')
+					for name,score in kw.items():          #'.items()'的使用
+						print('%10s  %d'%(name,score))
+					print()
+			   >>>def info(name,*,gender,city='Beijing',age):
+					print('Personal Info')
+					print('-------------')
+					print('    Name: %s'%name)
+					print('  Gender: %s'%gender)
+					print('    City: %s'%city)
+					print('     Age: %s'%age)
+	                print()                                #'print()'的使用
+  3.4 Recursion functions
+  
 			   
 	           
