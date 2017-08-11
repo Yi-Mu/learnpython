@@ -358,6 +358,35 @@
 			      next(o)
 				  next(o)
   4.6 Iterator
-               #
-					
-	           
+               #凡是可用于for循环的对象都是Iterable对象/可迭代对象, 如list,tuple,dict,str和generator;
+			   #凡是可用于next()的对象都是Iterator对象/迭代器对象，表示一个惰性计算的序列,如generator和iter(list),iter(tuple),iter(dict),iter(str);
+			   #list,tuple,dict,str:不是Iterator，却可以通过Iter()转变；
+			   #Iterator表示一个数据流，可以被next()不断调用，直到没有数据时抛出StopIteration错误，我们不知其长度，是惰性的;
+			   #Iterator甚至可以表示一个无限大的数据流，如全体自然数，而list不可能存储所有自然数;
+			   >>>from collections import Iterable
+			   >>>isinstance([],Iterable)
+			   >>>isinstance([],Iterator)
+			   >>>isistance(iter([]),Iterator)
+5. Functional programming(函数式编程)
+  5.1 #函数式编程是一种抽象程度很高的编程范式，纯粹的函数式编程语言编写的函数没有变量，任意一个函数，输入确定输出就确定(没有副作用)；
+      #一个特点就是: 允许把函数本身作为参数传入到另一个函数，还允许返回一个函数; Python部分支持，但因为使用变量，不是纯函数式编程语言;
+  5.2 High-order function
+      >>>f=abs
+	     f(-10)                     #变量可以指向函数;
+	  >>>def add(x,y,f):
+			return f(x)+f(y)        
+	  >>>add(-5,6,abs)              #传入函数;
+  5.3 map/reduce(接收一个函数和一个序列)
+      >>>list(map(str,[1,2,3,4,5,6]))       #['1','2','3','4','5','6']
+	  >>>def f(x):
+			return x*x
+	     list(map(f,[1,2,3,4,5])            #[1,4,9,16,25]
+	  >>>from functools import reduce
+	     def add(x,y):
+			return x+y
+		 reduce(add,[1,3,5,7,3])            #sum([1,2,3,4,5])
+	  >>>def fn(x,y):
+			return x*10+y
+		 reduce(fn,[1,4,7,8,3])             #14783
+  5.4 filter(接收一个函数和一个序列)
+      >>>
