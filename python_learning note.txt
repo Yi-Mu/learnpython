@@ -291,6 +291,73 @@
 					print('     Age: %s'%age)
 	                print()                                #'print()'的使用
   3.4 Recursion functions
-  
-			   
+               >>>def fact(n):
+					if n==1:
+						return 1
+					else:
+						return n*fact(n-1)                 #递归的逻辑比循环清晰，但是要防止溢出;
+4. Advanced features
+  4.1  在Python中，代码不是越复杂越好，而是越简单越好；代码越少，开发效率越高；1行代码能解决绝不用5行；
+  4.2 Slice
+               >>>L=list(range(100))                       #Slice十分有用，创建0-99的序列；
+			   >>>L[:10]             
+			   >>>L[-10:]
+			   >>>L[10:20]
+			   >>>L[:10:2]
+			   >>>L[::5]
+			   >>>L[:]
+			   >>>(1,2,3,4,5)[:3]
+			   >>>'ABCDFRG'[:3:2]
+  4.3 Iteration(对list，tuple，dict,string通过for循环来遍历，称为迭代)
+               >>>d={'a':1,'b':2'c':3}
+			      for key in d:
+					print(key)
+				  for value in d.values():
+					print(value)
+				  for k,v in d.items():
+					print(k,v)                              #分别迭代dict的key，values，key和values;
+			   >>>for a in 'ABC':                           #迭代字符串;
+					print(a)
+			   >>>for a,b in enumerate(['a','b','c'])       #对list迭代很简单，但希望出现下标,用'enumerate';
+					print(a,b)
+			   >>>for x,y in [(1,1),(2,4),(3,9)]:           #同时引用两个变量;
+					print(x,y)
+			   >>>from collections import Iterable:
+				  isinstance('abd',Iterable)
+				  isinstance([1,2,3],Iterable)
+				  isinstance(123,Iterable)                  #判断一个对象是否是可迭代对象; 
+  4.4 List comprehensions(运用列表生成式可以快速生成list，代码十分简洁)
+               >>>[x*x for x in range(1,11)]
+			   >>>[x*x for x in range(1,11) if x%2==0]
+			   >>>[m+n for m in 'ABS' for n in 'XDE']       #两层循环，三层及以上很少用到;
+			   >>>import os
+			      [d for d in os.listdir('.')]              #列出当前目录下的所有文件和目录名;
+			   >>>d={'x':1,'y':2,'z':3}
+			      [k+'='+v for k,v in d.items()]
+			   >>>L=['Hello','World','IBM','Apple']
+			      [s.lower() for s in L]                    #把list中的所有字符串变成小写;
+			   >>>L1=['Hello','World',15,'Apple',None]
+                  L2=[x for x in L1 if isinstance(x,str)]
+                  L3=[x.lower() for x in L2]
+                  print(L3)
+  4.5 Generator
+               #列表容量有限，在循环过程中一边循环一边计算后续元素，就是生成器;
+               >>>g=(x*x for x in range(10))                #创建generator的第一种方法：将列表生成式的[]改成();
+               >>>for n in g:
+                    print(n)                                #for循环打印出generator的每一个元素;
+               >>>def fib(max):                             #创建generator的第二种方法，将函数的'print()'换成'yield()';
+                    n,a,b=0,0,1                             #适用于算法复杂，列表生成式无法实现;
+                    while n<max:
+                       yield(b)
+                       a,b=b,a+b
+                       n=n+1
+                    return 'done'	    
+               >>>for n in fib(6)
+					print(n)            #拿不到return的返回值；
+			   >>>o=fib(4)              #调用generator时，首先要生成一个generator对象，然后用next()不断获得下一个返回值(不常用);
+			      next(o)
+				  next(o)
+  4.6 Iterator
+               #
+					
 	           
