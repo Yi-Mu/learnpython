@@ -428,8 +428,134 @@
 	  >>>f=lalmbda x:x*x
 	     f(5)                                  #lambda函数是一个函数对象，只有把它赋值给一个变量，再利用变量调用函数才能得到结果；
       #限制：只能有一个表达式；
-  5.8 Decorator
+  5.8 Decorator(learn later if needed)
       >>>
   5.9 Partial function('偏函数',import functools)
       >>>当函数的参数个数太多，需要简化时，'functools.partial'可以创建一个新函数，固定住原函数的部分参数，从而在调用时更简单;
-	  >>>
+	  >>>int('12345',base=16)     #传入base参数，实现16进制的转换;
+	  >>>import functools
+	     int2=functools.partial(int,base=2)
+	  >>>int2('1010101')          #这样就可以大量转换二进制字符串，而不用每次都要传入base=2那么麻烦;
+	  >>>int2('1010101',base=10)  #当然，之前只是设定了默认值，完全可以传入其他值;
+	  >>>max2=functools.partial(max,10)
+	     max2(2,3,4)              #'10';
+	  >>>牢记，创建偏函数时，实际上接收的是函数对象，*args，*kw这3个参数，'base=10'传入的是*kw, 而'10'传入的是*args,会自动加到左边;
+6. Module
+  6.1 >>>Build-in functions(68):
+            abs,all,any,ascii,bin,bool,bytearray,bytes,callable,chr,classmethod,compile,complex,delattr;
+			dict,dir,divmod,enumerate,eval,exec,filter,float,format,frozenset,getattr,globals,hasattr,hash;
+			help,hex,id,input,int,isinstance,issubclass,iter,len,list,locals,map,max,memoryview;
+			min,next,object,oct,open,ord,pow,print,property,range,repr,reversed,round,set;
+			setattr,slice,sorted,staticmethod,str,sum,super,tuple,type,vars,zip,__import__;
+      >>>一个'.py'文件就是一个模块(Module)；可以避免函数名和变量名冲突，因为他们存在不同模块里；但自己编写模块，不要与内置函数名字冲突;
+	  >>>为了避免模块名冲突，引入包(Package)；每个包目录下都有'_init_.py'，它必须存在，'mypack'包内模块'abc.py'就成了'mypack.abc';
+  6.2 使用模块
+      >>>#-*- utf-8 -*-            #标准注释，表示'.py'文件本身使用标准utf-8编码；
+	     'a test module'           #任何模块代码的第一个字符串都被是视为模块的文档注释；
+		 __author__='Yi Mu'        #把作者写进去，公开源代码后别人就可以瞻仰你的大名；
+		 import xxx                #第一步是导入需要用到的模块；
+		 ......
+      >>>作用域
+	  >>>abc,x123,PI               #函数和变量名是公开的，public，可以被直接引用；
+	     __author__, __name__      #特殊变量，可以被直接引用，但是有特殊用途，我们自己的变量一般不要用这种变量名；
+		 _abc, __abc               #这样的函数或变量名是非公开的，private，不应该被直接引用；
+	  >>>def _private_1(name):
+			return 'Hello, %s'%name
+		 def _private_2(name):
+			return 'Hi, %s'%name
+		 def greeting(name):
+			if len(name)>3:
+				return _private_1(name)    #我们在模块里公开greeting()函数，而把内部逻辑用private函数隐藏了，调用greeting()不用关心内部
+			else:                          #private函数细节，这是一种非常有用的代码封装和抽象的方法；
+				return _private_2(name)    #即：外部不需要的函数定义为private，只有外部需要引用的函数才定义为public；
+  6.3 安装第三方模块
+      >>>通过包管理工具pip完成：确保安装Python时勾选了pip和Add python.exe to Path; 在命令行运行'pip',未找到命令,则需重新安装Python添加pip;
+	  >>>安装第三方库，在'pypi.python.org'找到库的名称，在命令行输入"pip install Pillow"(以Pillow为例)；
+	  >>>加载模块时，Python会在指定的路径下搜索'.py'文件，找不到会报错；搜索路径放在sys模块的path变量中；
+	  >>>import sys
+	     sys.path
+	  >>>如果要添加自己的搜索目录，设置环境变量PYTHONPATH；
+7.面向对象编程
+      #Object Oriented Programming(OOP),面向对象编程，把对象作为程序的基本单元，一个对象包含数据和操作数据的函数；
+	  #Python中，所有数据类型都可以视为对象，当然也可以自定义对象，自定义对象数据类型就是类(class);
+	  #数据封装，继承和多态是面向对象的三大特点；
+	  #类(class)，实例(instance)，属性(property)，方法(method)；
+  7.1 类和实例,数据封装
+      >>>class Student(object):  #定义类，类名通常是大写开头的单词，紧接着(object)表示该类从哪个类继承下来的，如果没有合适的继承类，就是object；
+			def __init__(self,name,score):  #创建类的时候，把一些属性绑上去；通过特殊的__init__方法；注意第一个参数必须是self，其余可用*args,**kw;
+				self.name=name
+				self.score=score
+			def print_score(self):   #在类的内部定义访问数据的函数，把数据“封装”起来了，这些封装函数称为类的方法，第一个参数self，其余*args,**kw；
+				print('%s: %s'%(self.name,self.score))
+			def get_grade(self):
+				if self.score>=90:
+					return 'A'
+				elif self.score>=60:
+					return 'B'
+				else:
+					return 'C'
+		bart=Student('Bart Simpson',59)    #创建类Student的实例，同时要传入和__init__方法匹配的参数，self不用传；
+		lisa=Student('Lisa Simpson',87)
+		bart.print_score()                 #调用一个方法，在实例上直接调用，self不用传，其余正常传入；
+		lisa.get_grade()                   #外部看Student类，创建需要给出name和score，如何打印在内部定义被封装，调用容易，不知内部细节；
+		bart.age=8    #可以自由地给实例绑定类不存在的属性；
+		bart.age      #8；虽然两个实例是属于同一个类的不同实例，但拥有的变量名称有可能不同；
+		lisa.age      #不存在！
+  7.2 访问限制
+      >>>class Student(object):  #由于通过外部可以自由修改一个实例的name，score属性，则'__name','__score'变成private，外部不能访问；
+			def __init__(self,name,score):   #__XXX__是特殊变量，可以直接访问，不是private；
+				self.__name=name             #_name，只有一个下划线的，外部也可以访问，但意思是’虽然可以被访问，但请将我视为private‘；
+				self.__score=score
+			def get_name(self):  #想要从外部获取name和score，增加方法get_name,get_score;
+				return self.__name
+			def get_score(self):
+				return self.__score
+			def set_score(self,score):   #还想从外部修改score，增加set_score方法，在方法中还可以对参数检查，避免传入无效的参数；
+				if 0<=score<=100:
+					self.__score=score
+			def print_score(self):
+				print('%s: %s'%(self.__name,self.__score))
+			bart=Student('Bart Simpson',59)
+	  >>>bart.__name               #'Student' object has no attribute '__name';外部无法访问；
+	  >>>bart.__name='New name'    #这是错误写法；
+	  >>>bart.__name     #'New name', 表面上成功设置了__name，实际上这个和class内部的__name变量不是一个变量！该代码相当于给bart新增一个变量；
+	  >>>bart.get_name()           #'Bart Simpson';
+  7.3 继承和多态
+      >>>class Animal(object):            
+			def run(self):
+				print('Animal is running...')
+		 class Dog(Animal):        #我们定义class的时候，可以从现有的class继承，新类称为子类(subclass),被继承的类称为父类；
+			def run(self):
+				print('Dog is running...')
+		 class Cat(Animal):        #继承的好处是获得了父类的全部功能，因此即使Cat只定义了pass，也会自动拥有run方法；
+			def run(self):         #可以对父类的run方法改进；当子类和父类存在相同的方法时，子类的run覆盖了父类的run，运行时会调用子类的：多态！
+				print('Cat is running...')
+			def eat(self):         #对子类Cat增加方法；
+				print('Eating meat...')
+	  >>>a=Dog()
+	     a.run()
+	  >>>a=list()                   #我们定义一个class时，就是定义一种新的数据类型，和Python自带的str，list，dict没有什么两样；
+	     b=Animal()                 #a是list类型，b是Animal类型，c是Cat类型；Animal()就是Animal类的一个实例，因为他没有参数输入，因此是空括号；
+		 c=Cat()
+		 isinstance(a,list)         #判断一个变量是否是某个类型；
+		 isinstance(c,Cat)
+	     isinstance(c,Animal)       #Cat是Animal类型，而Animal不是Cat类型；子类的数据类型可以看做是父类，反之则不成立：多态！
+		 isinstance(b,Cat)
+	  >>>def run_twice(x):
+			x.run()
+			x.run()
+		 class Tor(Animal):
+			pass
+		 run_twice(Animal())        #输入Animal的实例；打印出'Animal is running...'；
+		 run_twice(Dog())           #输入Dog的实例；打印出'Dog is running...'；因为Dog有自己的run()方法；
+		 run_twice(Tor())           #输入Tor的实例；打印出'Animal is running...'；因为Tor没有自己的run(),就打印Animal的run();
+	  #多态的好处就是，当我们传入Dog，Cat,Tor时，只需要接收Animal类型就可以了，按照Animal类型操作即可；
+	  #由于Animal类型有run方法，因此，传入的任意类型，只要是Animal类或子类，就会调用实际类型的run方法，这就是多态的意思；
+	  #对于一个变量，我们只需要知道他是Animal类型，无需确定知道他的子类型，就可以放心调用run()方法，而具体作用在什么对象上，由确切类型决定；
+	  >>>对于静态语言(如Java)，如果要传入Animal类型，则对象必须是Animal类或他的子类，否则不能调用run方法；
+	  >>>对于Python这样的动态语言来说，不一定要传入Animal类型，只要保证传入的对象有一个run()方法就可以了(动态语言的“鸭子类型”)；
+	  #继承可以把父类所有功能都拿过来，子类只要新增自己特有的方法，也可以把父类不合适的方法覆盖重写；
+	  #动态语言的鸭子类型特点决定了继承不像静态语言那样是必须的；
+  7.4 获取对象信息
+      >>>
+	  
