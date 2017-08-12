@@ -389,4 +389,47 @@
 			return x*10+y
 		 reduce(fn,[1,4,7,8,3])             #14783
   5.4 filter(接收一个函数和一个序列)
+      >>>def is_odd(n):
+			return n%2==1                            #返回值是True or False，filter根据T/F决定保留还是丢弃该元素;
+		 list(filter(is_odd,[1,2,3,4,5,5,7,8,9]))    #删除list中的偶数，只保留奇数;
+	  >>>def not_empty(s):
+			return s and s.strip()                   #返回值T/F，'.strip()'删除字符串前后的空格留下的部分;
+		 list(filter(not_empty,['a','','b',None,'c','  ']))   #把一个list中的空字符串删掉;
+	  #filter返回的是Iterator，是一个惰性序列，需要list()获取所有结果并返回;
+	  #具体例子见'primes()' and 'palindrome()';
+	  #如何定义一个筛选函数是最重要的，事实上，筛选函数返回值是True or False即可;
+	  >>>def is_palindrome(n):
+			return str(n)==str(n)[::-1] and len(str(n))>1
+		 list(filter(is_palindrome,range(1000)))
+	  #filter(func(n),xxx)，有些func后是有输入的，这时需要循环，而输出T/F的func不需要跟着输入;
+  5.5 Sorted
+      >>>sorted([36,5,-12,9,-21])
+	  >>>sorted([36,5,-12,9,-21],key=abs)
+      >>>sorted(['bob','about','Zoo','Credit'])
+	  >>>sorted(['bob','about','Zoo','Credit'],key=str.lower)
+	  >>>sorted(['bob','about','Zoo','Credit'],key=str.lower,reverse=True)
+	  #key函数非常强大，可以自己定义;
+  5.6 返回函数
+      >>>def lazy_sum(*args):
+			def sum():
+				ax=0
+				for n in args:
+					ax=ax+n
+				return ax
+			return sum                  #高阶函数可以把函数作为结果值返回;
+	  >>>f=lazy_sum(1,3,5,7,9)          #<funtion lazy_sum.<locals>.sum at xxx>调用函数时，返回的不是结果而是求和函数;
+	  >>>f()                            #25; 调用f时，才真正计算结果;
+	  >>>f2=lazy_sum(1,3,5,7,9)
+         f==f2                          #False; 调用lazy_sum时，每次调用都会返回一个新的函数，即使传入相同的参数,调用结果互不影响;	 
+      #这种称为'闭包(closure)'的程序结构有很大的威力；
+	  #牢记：返回函数不会立即执行，直到调用才执行，因此返回函数不要引用任何循环变量，或者后续会发生变化的变量;
+  5.7 匿名函数
+      >>>list(map(lambda x: x*x,[1,2,3,4,5]))  #lambda函数: 冒号前是参数，冒号后表达式结果就是结果；
+	  >>>f=lalmbda x:x*x
+	     f(5)                                  #lambda函数是一个函数对象，只有把它赋值给一个变量，再利用变量调用函数才能得到结果；
+      #限制：只能有一个表达式；
+  5.8 Decorator
       >>>
+  5.9 Partial function('偏函数',import functools)
+      >>>当函数的参数个数太多，需要简化时，'functools.partial'可以创建一个新函数，固定住原函数的部分参数，从而在调用时更简单;
+	  >>>
