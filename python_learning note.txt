@@ -428,8 +428,35 @@
 	  >>>f=lalmbda x:x*x
 	     f(5)                                  #lambda函数是一个函数对象，只有把它赋值给一个变量，再利用变量调用函数才能得到结果；
       #限制：只能有一个表达式；
-  5.8 Decorator(learn later if needed)
-      >>>
+  5.8 Decorator
+      >>>def now():
+			print('2017-8-13')
+		 now.__name__                          #函数对象有一个__name__属性，可以拿到函数的名字；
+      >>>import functools       #要增强函数的功能，如，在函数调用前后自动打印日志，但又不希望修改now()函数的定义；
+	     def log(func):         #这种在代码运行期间动态增加功能的方式，称为“装饰器”；实际上，他是一个返回函数的高阶函数；
+			@functools.wraps(func)
+			def wrapper(*args,**kw):
+				print('call %s():'%func.__name__)
+				return func(*args,**kw)
+			return wrapper
+		 @log                   #需要把decorator置于函数的定义处；
+		 def now():
+			print('2017-8-13')
+		 now()                  #call now():2017-8-13;
+	  >>>def logger(text):      #如果decorator本身需要传入参数，比如要定义logger的文本；
+			def decorator(func):
+				@functools.wraps(func)   #该句的作用是把 now.__name__=wrapper 改回原来的 now；
+				def wrapper(*args,**kw): 
+					print('%s %s():'%(text,func.__name__))
+					return func(*args,**kw)
+				return wrapper
+			return decorator
+		 @logger('DEBUG')
+		 def today():
+			print('2017-8-13')
+		 today()                 #DEBUG today():2017-8-13;
+		 print(today.__name__)   #'today';
+	  #decorator可以增强函数的功能，定义起来虽然有点复杂，但使用起来非常灵活和方便；
   5.9 Partial function('偏函数',import functools)
       >>>当函数的参数个数太多，需要简化时，'functools.partial'可以创建一个新函数，固定住原函数的部分参数，从而在调用时更简单;
 	  >>>int('12345',base=16)     #传入base参数，实现16进制的转换;
@@ -557,5 +584,79 @@
 	  #继承可以把父类所有功能都拿过来，子类只要新增自己特有的方法，也可以把父类不合适的方法覆盖重写；
 	  #动态语言的鸭子类型特点决定了继承不像静态语言那样是必须的；
   7.4 获取对象信息
+      [a.type]             #判断对象类型；
+	  >>>type(123)
+	     type('abc')
+	     type(None)        #基本类型
+	  >>>type(abs)
+	     dog=Dog(),type(dog)      #函数或者类，也可以判断；
+	  >>>type(123)==int
+	     type('abc')==str   #在if语句中判断；
+	  >>>def f():           
+			pass
+		 import types       #判断一个对象是否是函数，载入types模块；
+		 type(f)==types.FunctionType
+		 type(abs)==types.BuiltinFunctionType
+		 type(lambda x:x)==types.LambdaType
+		 type((x for x in range(10)))==types.GeneratorType
+	  [b.isinstance]
+	  >>>a=Dog()            #判断class的类型；
+	     isinstance(a,Dog)
+		 isinstance(a,Animal)
+	  >>>isinstance('a',str)   #能用type()判断的基本类型也能用isinstance()判断；
+	     isinstance(123,int)
+		 isinstance([1,2,3],(list,tuple))   #还能够判断某个变量是否是某些类型中的一种；
+	  [c.dir]               #获得一个对象所有的属性和方法；
+	  >>>dir('ABC')         #返回一个包含字符串的list，获得str对象'ABC'所有的属性和方法；
+	  >>>len('ABC')         #其中__xxx__的属性和方法在Python中有特殊用途，比如__len__返回长度；
+	     'ABC'.__len__()    #该方法和上式等价；
+		 'ABC'.lower()      #剩下的都是普通属性和方法，如lower()返回小写的字符串；
+	  [d.getattr(),setattr(),hasattr()]     #直接操作一个对象的状态；
+	  >>>class mydog(object):
+			def __init__(self):
+				self.x=9
+			def power(self):
+				return self.x*self.x
+		 obj=mydog()
+		 hasattr(obj,'x')    #有属性'x'吗？
+		 obj.x 
+		 setattr(obj,'y',19) #设置一个属性y；
+		 hasattr(obj,'y')
+		 getattr(obj,'y')    #获取属性y；
+		 obj.y               #获取属性y；
+		 getattr(obj,'z',404)   #但是getattr比obj.y的一个好处是，可以在不存在的情况下返回默认值；
+		 hasattr(obj,'power') #还可以获得对象的方法；
+		 getattr(obj,'power') #不能返回确切的值；
+		 f=getattr(obj,'power')  
+		 f()                  #可以通过赋值，或者obj.power();
+	  >>>sum=obj.x+obj.y      #只有在不知道对象信息的时候，才会去获取对象信息，如果可以这样直接写；
+	     sum=getattr(obj,'x')+getattr(obj,'y')  #就不要写成这样；
+  7.5 实例属性和类属性
+      >>>s=Student('Bob')
+         s.score=90	  #给实例绑定属性的方法是通过实例变量；
+	  >>>del s.score  #给Student类绑定属性直接在class中定义，所有该类的实例都可以访问；
+	                  #但如果实例属性和类属性值不同，会屏蔽类属性，只有删除实例属性后，类属性才能显示；
+8. 面向对象高级编程
+  8.1 __slots__
+      >>>class Student(object):
+			pass
+		 s=Student()
+		 s.name='Michael'             #创建一个class的实例后，可以给实例绑定任何属性；
+	  >>>def set_age(self,age):       #给实例绑定方法麻烦点，需要载入MethodType；还要先定义一个函数作为方法；
+			self.age=age
+		 from types import MethodType
+		 s.set_age=MethodType(set_age,s)
+		 s.set_age(25)                #给一个实例s绑定的属性和方法对另一个实例s2是不起作用的；
+	  >>>def set_score(self,score):   #为了给所有实例都绑定方法，可以给class绑定方法；
+			self.score=score
+		 Student.set_score=set_score  #本来方法可以直接定义在class中，但动态绑定允许在程序运行中动态给class加上功能；
+		 s.set_score(100)
+		 s2.set_score(99)
+	  >>>class Student(object):       #如果想要限制实例的属性，如只允许Student实例添加name和age属性；
+			__slots__=('name','age')
+		 s.name='Michael'
+		 s.score=99                   #会报错；
+		                              #需要注意的是__slots__只对当前类的实例起作用，对继承的子类不起作用，除非在子类中也定义__slots__；
+  8.2 @property
       >>>
-	  
+		 
