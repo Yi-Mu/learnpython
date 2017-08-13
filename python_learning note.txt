@@ -658,5 +658,57 @@
 		 s.score=99                   #会报错；
 		                              #需要注意的是__slots__只对当前类的实例起作用，对继承的子类不起作用，除非在子类中也定义__slots__；
   8.2 @property
+      >>>class Student(object):       #为了检查参数：通过一个set_score设置成绩,get_score来获取成绩；
+			def get_score(self):
+				return self._score
+			def set_score(self,value):
+				if not isinstance(value,int):
+					raise ValueError('score must be an integer!')
+				if value<0 or value>100:
+					raise ValueError('score must between 0~100!')
+				self._score=value
+	  >>>class Student(object):      #更简单的方式：既能检查参数，又能类似属性的简单方式访问变量；
+			@property                #@property就是负责把一个方法变成属性调用的；
+			def score(self):         #通过加上@property把一个getter方法变成属性；
+				return self._score
+			@score.setter            #又创建了另一个装饰器@score.setter,把一个setter方法变成属性赋值；
+			def score(self,value):
+				if not isinstance(value,int):
+					raise ValueError('score must be an integer!')
+				if value<0 or value>100:
+					raise ValueError('score must between 0~100!')
+				self._score=value
+      >>>class Student(object):
+			@property
+			def birth(self):
+				return self._birth
+			@birth.setter
+			def birth(self,value):
+				self._birth=value
+			@property                #还可以只定义getter方法，不定义setter方法就是一个只读属性；
+			def age(self):
+				return 2015 - self._birth
+	  #@property广泛应用在类的定义中，可以让调用者写出简短的代码，同时保证对参数进行必要的检查；
+  8.3 多重继承
+      >>>class Animal(object):
+			pass
+		class Mammal(Animal):
+			pass
+		class Bird(Animal):
+			pass	
+		class Runnable(object):
+			def run(self):
+				print('Running...')	
+		class Flyable(object):
+			def fly(self):
+				print('Flying...')
+	  >>>class Dog(Mammal,Runnable):   #通过多重继承，一个子类就可以同时获得多个父类的所有功能；
+			pass
+		class Bat(Mammal,Flyable):     #这种设计通常称为Mixin，Mixin的目的就是给一个类增加多个功能；
+			pass                       #这样，在设计类的时候，优先考虑通过多重继承来组合多个Mixin的功能，而不是设计
+		class Parrot(Bird,Flyable):    #多层次的复杂的继承关系；
+			pass
+		class Ostrich(Bird,Runnable):
+			pass		
+  8.4 定制类
       >>>
-		 
