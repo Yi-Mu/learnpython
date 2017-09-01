@@ -711,4 +711,139 @@
 		class Ostrich(Bird,Runnable):
 			pass		
   8.4 定制类
+      >>>class Student(object):
+			def __init__(self,name):
+				self.name=name
+			def __str__(self):         #定义__str__()方法，返回一个好看的字符串；
+				return 'Student object (name: %s)'%self.name
+			__repr__=__str__           #__str__返回用户看到的字符串，__repr__返回程序开发者看到的；通常两者相同；
+	  >>>print(Student('Micheal'))     #Student object(name: Micheal);
+		 s=Student('Bob')
+		 s                             #Student object(name: Bob); 若没有最后一句，返回<__main__.Student object at xxx>;
+		 
+	  >>>class Fib(object):
+			def __init__(self):
+				self.a,self.b=0,1
+			def __iter__(self):        #如果一个类想被用于for...in循环，要实现__iter__方法，它返回一个迭代对象；
+				return self            #for循环会不断调用该迭代对象的__next__方法拿到循环的下一个值，直到StopIteration退出循环；
+			def __next__(self):
+				self.a, self.b=self.b, self.a+self.b
+				if self.a>1000:
+					raise StopIteration()
+				return self.a
+			def __getitem__(self,n):   #表现得像list那样按照下标取出元素，需要实现__getitem__方法；
+				if isinstance(n,int):  #判断__getitem__传入的参数是一个int还是一个切片对象slice；
+					a,b=1,1
+					for x in range(n):
+						a,b=b,a+b
+					return a
+				if isinstance(n,slice):  #判断__getitem__传入的参数是一个int还是一个切片对象slice；
+					start=n.start
+					stop=n.stop
+					if start is None:
+						start=0
+					a,b=1,1
+					L=[]
+					for x in range(stop):
+						if x>=start:
+							L.append(a)
+						a,b=b,a+b
+					return L
+	  >>>for n in Fib():
+			print(n)
+	  >>>Fib()[19]                     #6795
+	  >>>f=Fib()
+	     f[:10]                        #[1,1,2,3,5,8,13,21,34,55]
+		                               #没有对step参数做处理：f[:10:2];也还没有对负数做处理；__getitem__还有很多工作要做；
+	          
+	  >>>如果把对象看成一个dict，__getitem__的参数也可能是一个可以做key的object，如str；与之对应的是__setitem__方法，把对象视作list或dict来对集合赋值；
+	  >>>最后，还有一个__delitem__方法，用于删除某个元素；通过这些方法，我们自己定义的类表现的和Python自带的list，tuple，dict没有什么区别；
+	  
+	  >>>class Student(object):
+			def __init__(self):
+				self.name='Michael'
+			def __getattr__(self,attr):   #调用不存在的方法或属性时，不存在时会报错，需要__getattr__方法，动态返回一个属性；
+				if attr=='score':
+					return 99
+				elif attr=='age':
+					return lambda:25
+				else:
+					raise AttributeError('\'Student\' object has no attribute \'%s\''%attr)
+	  >>>s=Student()
+	     s.name                           #'Michael';
+		 s.score                          #99;
+		 s.age()                          #这样当调用不存在的属性时，会返回一个事先设定的值，当然返回函数也是完全可以的，不过要注意加();
+		 s.abc                            #已有属性不会在__getattr__中查找，任意调用不存在的属性，如果没有特殊设定，默认返回None；我们可以抛出错误；
+	                                      #这种方式实际上把一个类的所有属性和方法调用全部动态化处理了，不需要任何特殊手段；
+										  #这种完全动态调用的特性有什么实际作用呢，作用就是，可以针对完全动态的情况做调用；					  
+	  >>>class Chain(object):             #现在很多网站都搞REST API，如果要写SDK，给每个URL对应的API都写一个方法，要累死，而且API一旦改动，SDK也要改；
+			def __init__(self,path=''):   #利用完全动态的__getattr__，我们可以写出一个链式调用；
+				self._path=path
+			def __getattr__(self,path):
+				return Chain('%s/%s'%(self._path,path))
+			def __str__(self):
+				return self._path
+			__repr__=__str__              #无论API怎么变，SDK都可以根据URL实现完全动态的调用，而且不随API的增加而改变；
+	  >>>Chain().status.user.timeline.list    #'/status/user/timeline/list';
+	  >>>Chain().users('Miachel').repos   #还有些REST API会把参数放到URL中，调用时需要把users替换成实际用户名；
+	  
+	  >>>class Student(object):           #调用实例方法时，用instance.method()来调用，能不能直接在实例本身上调用呢，需要定义__call__方法；
+			def __init__(self,name):
+				self.name=name
+			def __call__(self):
+				print('My name is %s.'%self.name)
+	  >>>s=Student('Miachel')
+	     s()                              #My name is Miachel.
+		 s.name                           #'Miachel';
+	  >>>__call__()还可以定义参数，对实例直接调用就和对一个函数直接调用一样，完全可以把对象看成函数，把函数看成对象；
+	  >>>如果把对象看成函数，那么函数本身也可以在运行期间动态创建出来，因为类的实例都是在运行期间创建的，这样就模糊了对象和函数的界限；
+	  >>>怎样判定一个变量是函数还是对象呢，更多时候，我们需要判定一个对象是否能够被调用：callable()函数；
+	  >>>callable(Student())              #True;
+	     callable(max)                    #True;
+		 callable([1,2,3])                #False;
+		 callable(None)                   #False;
+	  >>>Python的class允许定义许多定制方法，方便生成特定的类，更多特定方法见 https://docs.python.org/3/reference/datamodel.html#special-method-names；
+  8.5 使用枚举类
       >>>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
